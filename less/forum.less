@@ -1,0 +1,92 @@
+.LinkRobinsToc {
+    margin: 0 0 24px;
+    padding: 14px 18px 16px;
+    background: rgba(127, 127, 127, 0.06);
+    border-left: 3px solid var(--primary-color, #1e6fd9);
+    border-radius: 4px;
+}
+
+.LinkRobinsToc-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted-color);
+    margin: 0 0 8px;
+}
+
+.LinkRobinsToc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.LinkRobinsToc-item {
+    margin: 2px 0;
+    padding: 0;
+    line-height: 1.45;
+}
+
+.LinkRobinsToc-item--level-1 { padding-left: 0; }
+.LinkRobinsToc-item--level-2 { padding-left: 16px; }
+.LinkRobinsToc-item--level-3 { padding-left: 32px; }
+
+.LinkRobinsToc-link {
+    display: inline-block;
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 0.95rem;
+    padding: 2px 0;
+    border-bottom: 1px solid transparent;
+
+    &:hover {
+        color: var(--link-color, var(--primary-color));
+        border-bottom-color: currentColor;
+    }
+}
+
+.LinkRobinsToc-anchor {
+    display: block;
+    position: relative;
+    top: -16px;
+    visibility: hidden;
+    height: 0;
+    pointer-events: none;
+}
+
+.LinkRobinsToc-heading {
+    position: relative;
+    cursor: pointer;
+
+    .LinkRobinsToc-linkIcon {
+        margin-left: 8px;
+        font-size: 0.75em;
+        color: var(--muted-color);
+        opacity: 0;
+        transition: opacity 120ms ease-out;
+    }
+
+    &:hover .LinkRobinsToc-linkIcon {
+        opacity: 0.7;
+    }
+}
+
+.LinkRobinsToc-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    padding: 8px 16px;
+    background: rgba(20, 20, 20, 0.92);
+    color: #fff;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    pointer-events: none;
+    animation: LinkRobinsToc-toastIn 180ms ease-out;
+}
+
+@keyframes LinkRobinsToc-toastIn {
+    from { opacity: 0; transform: translate(-50%, 6px); }
+    to   { opacity: 1; transform: translate(-50%, 0); }
+}
