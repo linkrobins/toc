@@ -5,7 +5,7 @@
     "license": "MIT",
     "keywords": ["flarum", "toc", "table-of-contents", "headings", "anchors"],
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "flarum/core": "^2.0"
     },
     "autoload": {
