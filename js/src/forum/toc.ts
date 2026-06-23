@@ -51,13 +51,20 @@ function slugify(text: string): string {
   return s || 'section';
 }
 
-function uniqueSlug(base: string, used: Record<string, number>): string {
-  if (!used[base]) {
-    used[base] = 1;
+// Return an id not yet in `used`, suffixing `-2`, `-3`, ... on collision. We
+// track every assigned id (not just a per-base counter) and loop until the
+// candidate is free, so a deduped `intro` -> `intro-2` can't collide with a
+// heading whose natural slug is already `intro-2`.
+function uniqueSlug(base: string, used: Set<string>): string {
+  if (!used.has(base)) {
+    used.add(base);
     return base;
   }
-  used[base] += 1;
-  return `${base}-${used[base]}`;
+  let n = 2;
+  while (used.has(`${base}-${n}`)) n++;
+  const id = `${base}-${n}`;
+  used.add(id);
+  return id;
 }
 
 export function findBody(root: Element | null): Element | null {
@@ -65,16 +72,25 @@ export function findBody(root: Element | null): Element | null {
   return root.querySelector('.Post-body, .LinkRobinsBlog-post-body');
 }
 
-export function processHeadings(bodyEl: Element, postNumber: number | null): TocEntry[] {
-  const headings = bodyEl.querySelectorAll<HTMLElement>(headingSelector());
-  if (!headings.length) return [];
+// Pure read: the heading elements that belong in the TOC — already-instrumented
+// ones, or new ones with non-empty text. No DOM mutation, so callers can inspect
+// the heading set without side effects.
+export function collectHeadings(bodyEl: Element): HTMLElement[] {
+  const headings = Array.from(bodyEl.querySelectorAll<HTMLElement>(headingSelector()));
+  return headings.filter((h) => !!h.dataset.linkrobinsTocId || (h.textContent || '').trim() !== '');
+}
 
-  const used: Record<string, number> = {};
+// Mutation: assign ids, inject the anchor / link icon / click handler, and
+// return the TOC entries. Reuses ids stored on a previous render.
+function instrumentHeadings(headings: HTMLElement[], postNumber: number | null): TocEntry[] {
+  const used = new Set<string>();
   const entries: TocEntry[] = [];
 
   headings.forEach((h) => {
-    // Already processed on a previous render — reuse the stored id/text.
+    // Already processed on a previous render — reuse the stored id/text, and
+    // reserve the id so later headings can't be slugged onto it.
     if (h.dataset.linkrobinsTocId) {
+      used.add(h.dataset.linkrobinsTocId);
       entries.push({
         id: h.dataset.linkrobinsTocId,
         text: h.dataset.linkrobinsTocText || (h.textContent || '').trim(),
@@ -126,6 +142,12 @@ export function processHeadings(bodyEl: Element, postNumber: number | null): Toc
   });
 
   return entries;
+}
+
+// Composed entry point: collect (read) then instrument (mutate). Callers use
+// this; the two halves are separable for testing and clarity.
+export function processHeadings(bodyEl: Element, postNumber: number | null): TocEntry[] {
+  return instrumentHeadings(collectHeadings(bodyEl), postNumber);
 }
 
 function copyDeepLink(id: string): void {
@@ -233,7 +255,7 @@ export function scrollToAnchor(id: string): void {
   const el = document.getElementById(id);
   if (!el) return;
   const rect = el.getBoundingClientRect();
-  let offsetY = rect.top + window.pageYOffset;
+  let offsetY = rect.top + window.scrollY;
 
   const header = document.querySelector('.App-header');
   if (header) {

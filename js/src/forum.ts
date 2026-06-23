@@ -48,7 +48,12 @@ app.initializers.add('linkrobins-toc', () => {
   }
 
   function startBlogObserver(): void {
-    const target = document.querySelector('#app') || document.body;
+    // Observe the content container, not #app: blog post bodies render inside
+    // #content, so watching the whole app woke this callback on every unrelated
+    // mutation (header, composer, dropdowns, alerts) for the entire session.
+    // #content persists across SPA navigations while its children swap, so
+    // late-inserted blog bodies are still caught. Fall back if it's absent.
+    const target = document.querySelector('#content') || document.querySelector('#app') || document.body;
     if (!target) return;
 
     const observer = new MutationObserver((mutations) => {
