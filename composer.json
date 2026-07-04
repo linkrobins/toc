@@ -9,7 +9,13 @@
             "email": "karl@linkrobins.com"
         }
     ],
-    "keywords": ["flarum", "toc", "table-of-contents", "headings", "anchors"],
+    "keywords": [
+        "flarum",
+        "toc",
+        "table-of-contents",
+        "headings",
+        "anchors"
+    ],
     "require": {
         "php": "^8.3",
         "flarum/core": "^2.0"
@@ -27,6 +33,11 @@
                 "name": "fas fa-list-ol",
                 "color": "#07adcc",
                 "backgroundColor": "#1a2535"
+            }
+        },
+        "flarum-cli": {
+            "modules": {
+                "githubActions": true
             }
         }
     }
