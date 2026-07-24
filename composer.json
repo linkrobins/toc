@@ -30,7 +30,7 @@
             "title": "Link Robins Table of Contents",
             "category": "feature",
             "icon": {
-                "name": "fas fa-list-ol",
+                "name": "fas fa-list",
                 "color": "#07adcc",
                 "backgroundColor": "#1a2535"
             }
