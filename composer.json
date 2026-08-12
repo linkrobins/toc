@@ -3,10 +3,14 @@
     "description": "Auto-generated table of contents for Flarum posts. Builds anchors from Markdown headings (#, ##, ###) and renders an inline TOC at the top of each post that has 2+ headings.",
     "type": "flarum-extension",
     "homepage": "https://linkrobins.com/extensions/toc",
+    "support": {
+        "issues": "https://github.com/linkrobins/toc/issues",
+        "source": "https://github.com/linkrobins/toc"
+    },
     "license": "MIT",
     "authors": [
         {
-            "name": "Karl Bullock",
+            "name": "Link Robins",
             "email": "karl@linkrobins.com"
         }
     ],
@@ -20,11 +24,6 @@
     "require": {
         "php": "^8.3",
         "flarum/core": "^2.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "LinkRobins\\Toc\\": "src/"
-        }
     },
     "extra": {
         "flarum-extension": {
