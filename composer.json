@@ -27,7 +27,7 @@
     },
     "extra": {
         "flarum-extension": {
-            "title": "Link Robins Table of Contents",
+            "title": "LR TOC",
             "category": "feature",
             "icon": {
                 "name": "fas fa-list",
